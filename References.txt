@@ -1,0 +1,11 @@
+In this post I share a project that uses the new Data layer in the Google Maps JavaScript API, with a Google Sheets spreadsheet as a data source and a location search provided by Google Places Autocomplete.
+Follow these steps to add the script to the spreadsheet and make it available as a web service:
+https://mapsplatform.googleblog.com/2014/07/putting-your-professional-group-on-map.html
+
+
+Geocoding Service:
+https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+
+
+Before using the Geocoding service in the Maps JavaScript API, first ensure that the Geocoding API is enabled in the Google Cloud Platform Console, in the same project you set up for the Maps JavaScript API:
+https://developers.google.com/maps/documentation/javascript/geocoding

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test map</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+  // The web service URL from Drive 'Deploy as web app' dialog
+  var spreadsheet_url = "https://script.google.com/a/itcolima.edu.mx/macros/s/AKfycbw1Xeulob8KbmWJmdHNYaCqMcaRc2BRxFP9yJKaZSETXjNH5pg/exec?jsonp=?";
+  // Global variables
+  var gMap, geocoder;
+  var arr_address = [];
+  var arr_name = [];
+  var arr_type = [];
+
+  function initMap() {
+    var defaultLocation = new google.maps.LatLng(19.25, -103.73); // Colima coordinates
+    var defaultZoomLevel = 13;
+    var mapOptions = {
+      center: defaultLocation,
+      zoom: defaultZoomLevel,
+      panControl: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.LARGE
+      },
+      minZoom: 2,
+      restriction: {
+        latLngBounds: {north: 22, south: 17, west: -106, east: -98},
+        strictBounds: false
+      },
+      mapTypeControl: true,
+      streetViewControl: false,
+      overviewMapControl: true,
+      rotateControl: false,
+      fullscreenControl: true,
+      gestureHandling: 'greedy',
+      mapTypeId: 'roadmap'
+    };
+
+    gMap = new google.maps.Map(document.getElementById('map'), mapOptions);
+    geocoder = new google.maps.Geocoder();
+  }
+
+  $.ajax({
+    url: spreadsheet_url,
+    dataType: 'jsonp',
+    success: function(data) {
+      // Get the spreadsheet rows one by one
+      // First row contains headings, so start the index at 1 not 0
+      for (var i = 1; i < data.length; i++) {
+        arr_name.push(data[i][0]);
+        arr_address.push(data[i][1]);
+        data[i][2].toLowerCase().trim() == 'client'
+          ? arr_type.push('client') : arr_type.push('company');
+      }
+      // Geocode each address
+      for (var i = 0; i < arr_name.length; i++) {
+        if(arr_address[i].length < 10)
+          console.log('Address must have at least 10 characters');
+        else
+          geocodeAddress(arr_name[i], arr_address[i], arr_type[i]);
+      }
+    }
+  });
+
+  function geocodeAddress(marker_title, marker_adress, marker_icon) {
+    geocoder.geocode({'address': marker_adress}, function(results, status) {
+      if(status === 'OK') {
+        var marker = new google.maps.Marker({
+          map: gMap,
+          draggable: false,
+          animation: google.maps.Animation.DROP,
+          position: results[0].geometry.location,
+          title: marker_title,
+          icon: 'images/' + marker_icon + '.png',
+        });
+      }
+      else {
+        console.log('Geocode was not successful for the following reason: ' + status);
+      }
+    }); // Geocode function
+  }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKIx4rly6pMIesKaf-ZaCVW9uIu4jOl44&callback=initMap&language=en&region=US" async defer></script>
+</head>
+<body>
+  <div id="map"></div>
+</body>
+</html>
