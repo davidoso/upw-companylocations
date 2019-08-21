@@ -20,16 +20,16 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
   // The web service URL from Drive 'Deploy as web app' dialog
-  var spreadsheet_url = "https://script.google.com/a/itcolima.edu.mx/macros/s/AKfycbw1Xeulob8KbmWJmdHNYaCqMcaRc2BRxFP9yJKaZSETXjNH5pg/exec?jsonp=?";
+  var spreadsheet_url = "https://script.google.com/macros/s/AKfycbxR3kV8n0KoiSh8xSb4pz7cVmwofPhYYk8vdTHEv6tV2LwjSVY6/exec?jsonp=?";
   // Global variables
   var gMap, geocoder;
   var arr_address = [];
-  var arr_name = [];
-  var arr_type = [];
+  var arr_title = [];
+  var arr_time = [];
 
   function initMap() {
-    var defaultLocation = new google.maps.LatLng(19.25, -103.73); // Colima coordinates
-    var defaultZoomLevel = 13;
+    var defaultLocation = new google.maps.LatLng(63.2, 21.7); // Mustasaari, Finland coordinates
+    var defaultZoomLevel = 10;
     var mapOptions = {
       center: defaultLocation,
       zoom: defaultZoomLevel,
@@ -39,10 +39,10 @@
         style: google.maps.ZoomControlStyle.LARGE
       },
       minZoom: 2,
-      restriction: {
+      /*restriction: {
         latLngBounds: {north: 22, south: 17, west: -106, east: -98},
         strictBounds: false
-      },
+      },*/
       mapTypeControl: true,
       streetViewControl: false,
       overviewMapControl: true,
@@ -62,32 +62,50 @@
     success: function(data) {
       // Get the spreadsheet rows one by one
       // First row contains headings, so start the index at 1 not 0
-      for (var i = 1; i < data.length; i++) {
-        arr_name.push(data[i][0]);
+      for(var i = 1; i < data.length; i++) {
+        arr_title.push(data[i][0]);
         arr_address.push(data[i][1]);
-        data[i][2].toLowerCase().trim() == 'client'
-          ? arr_type.push('client') : arr_type.push('company');
+        arr_time.push(data[i][4]);
+        /*data[i][3].toLowerCase().trim() == 'yellow'
+          ? arr_color.push('yellow') : arr_color.push('blue');*/
       }
       // Geocode each address
-      for (var i = 0; i < arr_name.length; i++) {
+      for(var i = 0; i < arr_title.length; i++) {
         if(arr_address[i].length < 10)
           console.log('Address must have at least 10 characters');
         else
-          geocodeAddress(arr_name[i], arr_address[i], arr_type[i]);
+          geocodeAddress(arr_title[i], arr_address[i], arr_time[i]);
       }
     }
   });
 
-  function geocodeAddress(marker_title, marker_adress, marker_icon) {
+
+  function geocodeAddress(marker_title, marker_adress, marker_time) {
     geocoder.geocode({'address': marker_adress}, function(results, status) {
       if(status === 'OK') {
+        var contentString = '<div id="content">' +
+          '<div id="siteNotice">' +
+          '</div>' +
+          '<h3 id="firstHeading" class="firstHeading">' + marker_title + ': 1km</h3>' +
+          '<h3 id="firstHeading" class="firstHeading">Walking (should be icon): ' + marker_time + 'min</h3>' +
+          '<div id="bodyContent">' +
+          '<p>Address: ' + marker_adress + '.</p>' +
+          '<p>Description/more info here.</p>' +
+          '</div>' +
+          '</div>';
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
         var marker = new google.maps.Marker({
           map: gMap,
           draggable: false,
           animation: google.maps.Animation.DROP,
           position: results[0].geometry.location,
           title: marker_title,
-          icon: 'images/' + marker_icon + '.png',
+          icon: 'icons/' /*+ marker_icon + '/'*/ + marker_title.replace(/\s/g, "_") + '.png',
+        });
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
         });
       }
       else {
