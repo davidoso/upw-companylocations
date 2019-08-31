@@ -20,7 +20,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
   // The web service URL from Drive 'Deploy as web app' dialog
-  var spreadsheet_url = "https://script.google.com/macros/s/AKfycbxR3kV8n0KoiSh8xSb4pz7cVmwofPhYYk8vdTHEv6tV2LwjSVY6/exec?jsonp=?";
+  var spreadsheet_url = "https://script.google.com/macros/s/AKfycbzJqNIUeEBiBKbsj5aEfxkpnFTxw5RIesMIbewpnVHUkdLsPius/exec?jsonp=?";
   // Global variables
   var gMap, geocoder;
   var arr_address = [];
@@ -78,7 +78,6 @@
       }
     }
   });
-
 
   function geocodeAddress(marker_title, marker_adress, marker_time) {
     geocoder.geocode({'address': marker_adress}, function(results, status) {

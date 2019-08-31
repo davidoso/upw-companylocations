@@ -1,5 +1,5 @@
-var SPREADSHEET_ID = '1xsXXR7Zgf5bHvRihoAxjkhtz-AUIj2BEQUD9kolD1CY';
-var SHEET_NAME = 'clients';
+var SPREADSHEET_ID = '1ttOc7M3xQ9iTD_frISXF2NZCaIWHR7_kdQEtdx5mi7o';
+var SHEET_NAME = 'locations';
 function doGet(request) {
   var callback = request.parameters.jsonp;
   var range = SpreadsheetApp
