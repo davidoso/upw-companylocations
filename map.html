@@ -54,7 +54,7 @@
 
     gMap = new google.maps.Map(document.getElementById('map'), mapOptions);
     geocoder = new google.maps.Geocoder();
-  }
+  } // initMap()
 
   $.ajax({
     url: spreadsheet_url,
@@ -110,8 +110,8 @@
       else {
         console.log('Geocode was not successful for the following reason: ' + status);
       }
-    }); // Geocode function
-  }
+    });
+  } // geocodeAddress()
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=<YOUR_API_KEY_HERE>&callback=initMap&language=en&region=US" async defer></script>
 </head>
