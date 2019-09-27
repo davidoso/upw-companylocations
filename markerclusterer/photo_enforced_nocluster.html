@@ -12,8 +12,9 @@
       height: 100%;
     }
     #map {
-      width: 100%;
-      height: 100%;
+      margin: 50px;
+      width: 400px;
+      height: 400px;
     }
     .info-data {
       font-weight: normal;
@@ -24,8 +25,8 @@
   <script>
   // NOTE: Insert US city/state latitude and longitude to center map (in this case Los Angeles)
   var lat = 34;
-  var lng = -118;
-  var defaultZoomLevel = 10;
+  var lng = -118.3;
+  var defaultZoomLevel = 13;
   // The web service URL from Drive 'Deploy as web app' dialog
   var spreadsheet_url = "https://script.google.com/macros/s/AKfycbzVHywDLNRSDRM3bUWJfcPabgellRrGf2wJu385bbi3h_N3qHgX/exec?jsonp=?";
   // Global variables
@@ -71,15 +72,14 @@
     url: spreadsheet_url,
     dataType: 'jsonp',
     success: function(data) {
-      var i;
       // Get headers (first row) and cell values from Google Sheet
-      for(i = 0; i < data[0].length; i++) {
+      for(var i = 0; i < data[0].length; i++) {
         headers.push(data[0][i]);
       }
-      for(i = 1; i < data.length; i++) {
+      for(var i = 1; i < data.length; i++) {
         values.push(data[i]);
       }
-      for(i = 0; i < values.length; i++) {
+      for(var i = 0; i < values.length; i++) {
         if(values[i][0] != '' && values[i][1] != '') { // Lat and lng (first two columns) must not be empty
           plotMarker(values[i]);
           markerCounter++;
@@ -93,15 +93,15 @@
   function plotMarker(row) {
     var contentString = '<div id="content">';
     for(var i = 0; i < headers.length; i++) {
-      contentString += '<h4 class="info-title">' + headers[i] + ': <span class="info-data">' + row[i] + '</span></h4>';
+      contentString += '<h4>' + headers[i] + ': <span class="info-data">' + row[i] + '</span></h4>';
     }
     contentString += '</div>';
     var marker = new google.maps.Marker({
       map: gMap,
       draggable: false,
       // animation: google.maps.Animation.DROP, // NOTE: This hugely decreases performance. Map will freeze
-      position: new google.maps.LatLng(row[0], row[1]), // Lat and lng columns
-      title: row[2], // Name column
+      position: new google.maps.LatLng(row[0], row[1]), // Lat and lng columns on Google Sheet
+      title: row[2], // Name column on Google Sheet
       icon: 'icons/small_brown.png'
       // icon: 'icons/' /*+ marker_icon + '/'*/ + marker_title.replace(/\s/g, "_") + '.png',
     });
@@ -111,7 +111,6 @@
     });
   } // plotMarker()
   </script>
-  <!-- <script type="text/javascript" src="js/markerclusterer.js"></script> -->
   <script src="https://maps.googleapis.com/maps/api/js?key=<YOUR_API_KEY_HERE>&callback=initMap&language=en&region=US" async defer></script>
 </head>
 <body>

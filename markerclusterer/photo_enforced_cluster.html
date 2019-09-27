@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test map</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #map {
+      margin: 50px;
+      width: 400px;
+      height: 400px;
+    }
+    .info-data {
+      font-weight: normal;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+  // NOTE: Insert US city/state latitude and longitude to center map (in this case Los Angeles)
+  var lat = 34;
+  var lng = -118.3;
+  var defaultZoomLevel = 13;
+  // The web service URL from Drive 'Deploy as web app' dialog
+  var spreadsheet_url = "https://script.google.com/macros/s/AKfycbzVHywDLNRSDRM3bUWJfcPabgellRrGf2wJu385bbi3h_N3qHgX/exec?jsonp=?";
+  // Global variables
+  var gMap, infoWindow, markers, markerCluster;
+  var headers = [];
+  var values = [];
+
+  function initMap() {
+    var defaultLocation = new google.maps.LatLng(lat, lng);
+    var mapOptions = {
+      center: defaultLocation,
+      zoom: defaultZoomLevel,
+      panControl: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.LARGE
+      },
+      minZoom: 2,
+      /*restriction: {
+        latLngBounds: {north: 22, south: 17, west: -106, east: -98},
+        strictBounds: false
+      },*/
+      mapTypeControl: true,
+      streetViewControl: false,
+      overviewMapControl: true,
+      rotateControl: false,
+      fullscreenControl: true,
+      gestureHandling: 'greedy',
+      mapTypeId: 'roadmap'
+    };
+
+    gMap = new google.maps.Map(document.getElementById('map'), mapOptions);
+    infoWindow = new google.maps.InfoWindow();
+
+    gMap.addListener('click', function() {
+      if(infoWindow)
+        infoWindow.close();
+    });
+  } // initMap()
+
+  $.ajax({
+    url: spreadsheet_url,
+    dataType: 'jsonp',
+    success: function(data) {
+      // Get headers (first row) and cell values from Google Sheet
+      for(var i = 0; i < data[0].length; i++) {
+        headers.push(data[0][i]);
+      }
+      for(var i = 1; i < data.length; i++) {
+        values.push(data[i]);
+      }
+      markers = values.map(function(row) {
+        return new google.maps.Marker({
+          position: new google.maps.LatLng(row[0], row[1]), // Lat and lng columns on Google Sheet
+          title: row[2], // Name column on Google Sheet
+          icon: 'icons/small_brown.png'
+        });
+      });
+      markers.map(function(marker, i) {
+        var contentString = '<div id="content">';
+        for(var j = 0; j < headers.length; j++) {
+          contentString += '<h4>' + headers[j] + ': <span class="info-data">' + values[i][j] + '</span></h4>';
+        }
+        contentString += '</div>';
+        marker.addListener('click', function() {
+          infoWindow.setContent(contentString);
+          infoWindow.open(gMap, marker);
+        });
+      });
+      markerCluster = new MarkerClusterer(gMap, markers, {imagePath: 'clusters/m', maxZoom: 13});
+      console.log((data.length - 1) + ': cameras detected');
+    }
+  });
+
+  </script>
+  <script type="text/javascript" src="js/markerclusterer.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<YOUR_API_KEY_HERE>&callback=initMap&language=en&region=US" async defer></script>
+</head>
+<body>
+  <div id="map"></div>
+</body>
+</html>
