@@ -9,3 +9,20 @@ https://developers.google.com/maps/documentation/javascript/examples/geocoding-s
 
 Before using the Geocoding service in the Maps JavaScript API, first ensure that the Geocoding API is enabled in the Google Cloud Platform Console, in the same project you set up for the Maps JavaScript API:
 https://developers.google.com/maps/documentation/javascript/geocoding
+
+
+Marker Clustering:
+https://developers.google.com/maps/documentation/javascript/marker-clustering
+
+
+Here are some ways to optimize your markers (Fusion Tables, Grid-based clustering, MarkerManager, etc.):
+https://stackoverflow.com/questions/36861646/speed-up-the-page-with-80-000-markers-on-google-map
+
+
+Pricing Table For Maps, Routes, and Places:
+https://cloud.google.com/maps-platform/pricing/sheet
+
+
+Google Maps Platform Billing:
+https://developers.google.com/maps/billing/gmp-billing#dynamic-maps (7.00 USD per 1000)
+https://developers.google.com/maps/billing/gmp-billing#geocoding (5.00 USD per 1000)
