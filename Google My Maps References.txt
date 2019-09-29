@@ -1,0 +1,14 @@
+Import CSV layer to Google My Maps. Upload failed: Column names cannot be longer than 64 characters or include these characters
+https://support.google.com/maps/thread/3693654?hl=en
+
+
+Google Maps Query String Parameters
+http://asnsblues.blogspot.com/2011/11/google-maps-query-string-parameters.html
+
+
+How to update Google My Maps when Sheet data changes: Workaround add empty rows
+https://webapps.stackexchange.com/questions/90552/how-to-update-google-my-maps-when-spreadsheet-data-changes
+
+
+How to link My Maps data to Google Sheet: If what you are asking is how you can keep the Google Sheet and the Google My Maps automatically synchronised, there currently isn't a way to do that as far as i am aware
+https://support.google.com/maps/forum/AAAAQuUrST8Nf8ueDoY3ZM
