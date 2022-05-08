@@ -28,7 +28,7 @@
   var arr_time = [];
 
   function initMap() {
-    var defaultLocation = new google.maps.LatLng(63.2, 21.7); // Mustasaari, Finland coordinates
+    var defaultLocation = new google.maps.LatLng(63.2, 21.7); // Mustasaari, Finland
     var defaultZoomLevel = 10;
     var mapOptions = {
       center: defaultLocation,
@@ -39,10 +39,6 @@
         style: google.maps.ZoomControlStyle.LARGE
       },
       minZoom: 2,
-      /*restriction: {
-        latLngBounds: {north: 22, south: 17, west: -106, east: -98},
-        strictBounds: false
-      },*/
       mapTypeControl: true,
       streetViewControl: false,
       overviewMapControl: true,
